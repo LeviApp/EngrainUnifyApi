@@ -14,11 +14,9 @@ use Illuminate\Support\Facades\Http;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
-Route::get('/hello', function() {
+
+Route::get('/', function() {
     if (request()->header('API-Key') !== "7d64ca3869544c469c3e7a586921ba37") {
         return response()->json(["message" => "You do not have the proper credentials. Please try again."], 401);
     }

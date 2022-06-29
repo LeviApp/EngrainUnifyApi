@@ -18,8 +18,3 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/hello', function() {
-    $working = ["Working So Far"];
-    return $working;
-    
-    });
