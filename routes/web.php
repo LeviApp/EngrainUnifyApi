@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Http;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,7 +18,9 @@ use Illuminate\Support\Facades\Http;
 
 
 Route::get('/', function() {
-    if (request()->header('API-Key') !== "7d64ca3869544c469c3e7a586921ba37") {
+    $security = env('APP_SEC');
+
+    if (request()->header('API-Key') !== $security) {
         return response()->json(["message" => "You do not have the proper credentials. Please try again."], 401);
     }
     else {
@@ -35,7 +38,7 @@ Route::get('/', function() {
     }
 
     $units = Http::withHeaders([
-        'API-Key' => '7d64ca3869544c469c3e7a586921ba37',
+        'API-Key' => $security,
     ])->get("https://api.sightmap.com/v1/assets/1273/multifamily/units?per-page={$pages}&page={$current}");
         $pagination = $units["paging"];
         $pagination["total_pages"] = ceil(330/$pages);
@@ -49,10 +52,10 @@ Route::get('/', function() {
             $prev = ($pagination['prev_url'] ? explode('?', $pagination['prev_url'])[1] : "per-page=100&page={$pagination["total_pages"]}");
             $next = ($pagination['next_url'] ? explode('?', $pagination['next_url'])[1] : "per-page=100&page=1");
         }
-        $pagination["prev_url"] = ($prev ? "http://127.0.0.1:8000/hello?{$prev}" : null);
-        $pagination["next_url"] = ($next ? "http://127.0.0.1:8000/hello?{$next}" : null);
+        $pagination["prev_url"] = ($prev ? "https://engrain-unify.herokuapp.com/?{$prev}" : null);
+        $pagination["next_url"] = ($next ? "https://engrain-unify.herokuapp.com/?{$next}" : null);
         $area1units = array();
-        $areagreaterthan1units = array();
+        $areamoreunits = array();
 
     for ($i = 0; $i < count($units["data"]); $i++) {
         if ($units["data"][$i]["area"] == 1) {
@@ -60,12 +63,13 @@ Route::get('/', function() {
         }
 
         else {
-            array_push($areagreaterthan1units, $units["data"][$i]);
+            array_push($areamoreunits, $units["data"][$i]);
         }
     }
+
     $area1units = array_values($area1units);
 
-    $areamoreunits = array_values($areagreaterthan1units);
+    $areamoreunits = array_values($areamoreunits);
 
     return ["pages" => $pagination, "area1units" => ["total_count" => count($area1units), "data" => $area1units], "areamoreunits" => ["total_count" => count($areamoreunits), "data" => $areamoreunits]];
 }
