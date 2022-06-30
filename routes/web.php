@@ -18,10 +18,7 @@ use Illuminate\Support\Facades\Http;
 Route::get('/', function() {
     $security = env('APP_SEC');
 
-    if (request()->header('API-Key') !== $security) {
-        return response()->json(["message" => "You do not have the proper credentials. Please try again."], 401);
-    }
-    else {
+
     if (request()-> input("per-page")) {
         $pages = request()->input("per-page");
     }
@@ -70,5 +67,5 @@ Route::get('/', function() {
     $areamoreunits = array_values($areamoreunits);
 
     return ["pages" => $pagination, "area1units" => ["total_count" => count($area1units), "data" => $area1units], "areamoreunits" => ["total_count" => count($areamoreunits), "data" => $areamoreunits]];
-}
+
     });
