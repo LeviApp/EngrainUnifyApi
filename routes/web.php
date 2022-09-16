@@ -64,8 +64,8 @@ Route::get('/', function() {
         }
 
     // THIS WOULD SET THE PREVIOUS OR NEXT URLS TO NULL IF THE CURRENT PAGE IS THE FIRST OR LAST PAGE
-        $pagination["prev_url"] = ($prev ? "https://engrain-unify.herokuapp.com/?{$prev}" : null);
-        $pagination["next_url"] = ($next ? "https://engrain-unify.herokuapp.com/?{$next}" : null);
+        $pagination["prev_url"] = ($prev ? "https://engrain.onrender.com/?{$prev}" : null);
+        $pagination["next_url"] = ($next ? "https://engrain.onrender.com/?{$next}" : null);
         $area1units = array();
         $areamoreunits = array();
 
